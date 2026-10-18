@@ -1,0 +1,56 @@
+name: Publish v1.2.0
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - ".github/workflows/release-v1.2.0.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compile Legacy Aura Control
+        shell: cmd
+        run: |
+          "%WINDIR%\Microsoft.NET\Framework64\v4.0.30319\csc.exe" /nologo /target:winexe /platform:anycpu /optimize+ /win32icon:"assets\LegacyAura.ico" /out:"LegacyAura.exe" /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll "src\LegacyAura.cs"
+
+      - name: Build release package
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          New-Item -ItemType Directory -Force -Path dist\assets | Out-Null
+          New-Item -ItemType Directory -Force -Path dist\src | Out-Null
+          Copy-Item LegacyAura.exe dist\LegacyAura.exe
+          Copy-Item Install.cmd dist\Install.cmd
+          Copy-Item Uninstall.cmd dist\Uninstall.cmd
+          Copy-Item Build.cmd dist\Build.cmd
+          Copy-Item Build_and_Start.cmd dist\Build_and_Start.cmd
+          Copy-Item README.md dist\README.md
+          Copy-Item LICENSE dist\LICENSE
+          Copy-Item CHANGELOG.md dist\CHANGELOG.md
+          Copy-Item SUPPORTED_HARDWARE.md dist\SUPPORTED_HARDWARE.md
+          Copy-Item TROUBLESHOOTING.md dist\TROUBLESHOOTING.md
+          Copy-Item assets\LegacyAura.ico dist\assets\LegacyAura.ico
+          Copy-Item assets\LegacyAura.png dist\assets\LegacyAura.png
+          Copy-Item src\LegacyAura.cs dist\src\LegacyAura.cs
+          Compress-Archive -Path dist\* -DestinationPath LegacyAuraControl_1.2.0.zip -Force
+
+      - name: Publish GitHub Release
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view v1.2.0 *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload v1.2.0 LegacyAuraControl_1.2.0.zip LegacyAura.exe --clobber
+          } else {
+            gh release create v1.2.0 LegacyAuraControl_1.2.0.zip LegacyAura.exe --target "${{ github.sha }}" --title "Legacy Aura Control v1.2.0" --notes "English-only public release. Includes direct legacy ASUS Aura Core HID control, static/breathing/color-cycle/rainbow effects, four-zone control, hardware brightness, tray support, diagnostics, and Windows-login auto-apply. Confirmed on ASUS ROG GU501GM (VID 0B05 / PID 1866)."
+          }
