@@ -9,7 +9,8 @@
 [![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](#release)
 [![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4.svg)](#compatibility)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Hardware tested](https://img.shields.io/badge/tested-GU501GM-success.svg)](#confirmed-hardware)
+[![Hardware tested](https://img.shields.io/badge/tested-GU501GM-success.svg)](#confirmed-hardware)  
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support%20the%20project-FFDD00?logo=buymeacoffee&logoColor=000000)](https://buymeacoffee.com/schrubber)
 
 </div>
 
@@ -115,6 +116,14 @@ No proprietary ASUS SDK or ASUS binary is required.
 English-only public release based on the hardware-verified 1.1.x HID controller. System-tray support, effects, four-zone control, brightness and auto-apply are included.
 
 See [CHANGELOG.md](CHANGELOG.md).
+
+## Support the project
+
+If Legacy Aura Control helped you bring your old ROG keyboard RGB back to life and you would like to support further development, you can leave a tip here:
+
+☕ **[Buy me a coffee](https://buymeacoffee.com/schrubber)**
+
+Support is completely optional — the project remains free and open source.
 
 ## License
 
