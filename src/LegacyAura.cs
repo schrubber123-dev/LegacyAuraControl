@@ -1045,7 +1045,7 @@ namespace LegacyAuraControl
             colorsGroup.Controls.Add(breathSecondButton);
 
             Label hint = MakeLabel(
-                "Die zweite Farbe wird nur beim Effekt "Atmen" im Ein-Zonen-Modus verwendet.",
+                "Die zweite Farbe wird nur beim Effekt \"Atmen\" im Ein-Zonen-Modus verwendet.",
                 324, 153, 165);
             hint.Height = 78;
             hint.ForeColor = Color.FromArgb(145, 145, 150);
