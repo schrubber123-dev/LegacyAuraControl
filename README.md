@@ -6,7 +6,7 @@
 
 **Standalone RGB control for legacy ASUS ROG Aura Core laptop keyboards on modern Windows.**
 
-[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](#release)
+[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](#release)
 [![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4.svg)](#compatibility)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Hardware tested](https://img.shields.io/badge/tested-GU501GM-success.svg)](#confirmed-hardware)
@@ -41,6 +41,7 @@ No old Microsoft Store app required.
 - Built-in HID diagnostics
 - System tray / notification-area icon with quick actions
 - ASUS Fn brightness keys can continue to work normally
+- English-only user interface for a consistent public release
 
 ## Confirmed hardware
 
@@ -69,7 +70,7 @@ See [SUPPORTED_HARDWARE.md](SUPPORTED_HARDWARE.md) for more information.
 4. Run `Install.cmd`.
 5. Start **Legacy Aura Control** from the Desktop or Start Menu.
 6. Select an effect, color and brightness.
-7. Press **ANWENDEN**.
+7. Press **APPLY**.
 
 For portable use, run `Build_and_Start.cmd` instead.
 
@@ -81,7 +82,7 @@ The controller currently recognizes these legacy Aura Core product IDs:
 - `0B05:1866`
 - `0B05:1869`
 
-Only the **GU501GM / PID 1866** is claimed as hardware-confirmed in v1.1.0. Other IDs remain experimental until tested on real laptops.
+Only the **GU501GM / PID 1866** is claimed as hardware-confirmed in v1.2.0. Other IDs remain experimental until tested on real laptops.
 
 ## Coexistence with ASUS software
 
@@ -95,7 +96,7 @@ During RGB control, avoid running another application that writes to the same Au
 
 ## Diagnostics
 
-If your laptop is detected but does not react correctly, use **Diagnose kopieren** inside the app and include the result in a hardware compatibility report.
+If your laptop is detected but does not react correctly, use **Copy diagnostics** inside the app and include the result in a hardware compatibility report.
 
 ## Building from source
 
@@ -109,9 +110,9 @@ No proprietary ASUS SDK or ASUS binary is required.
 
 ## Release
 
-### v1.1.0
+### v1.2.0
 
-Adds system-tray support on top of the hardware-verified 1.0.x HID controller.
+English-only public release based on the hardware-verified 1.1.x HID controller. System-tray support, effects, four-zone control, brightness and auto-apply are included.
 
 See [CHANGELOG.md](CHANGELOG.md).
 
