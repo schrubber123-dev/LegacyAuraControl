@@ -394,8 +394,7 @@ namespace LegacyAuraControl
                 catch (Exception ex)
                 {
                     errors += string.Format(
-                        "
-PID_{0:X4} OUT={1} FEATURE={2}: {3}",
+                        "\r\nPID_{0:X4} OUT={1} FEATURE={2}: {3}",
                         d.ProductId, d.OutputReportLength, d.FeatureReportLength, ex.Message);
                 }
             }
@@ -458,8 +457,7 @@ PID_{0:X4} OUT={1} FEATURE={2}: {3}",
                 catch (Exception ex)
                 {
                     errors += string.Format(
-                        "
-PID_{0:X4} FEATURE={1}: {2}",
+                        "\r\nPID_{0:X4} FEATURE={1}: {2}",
                         d.ProductId, d.FeatureReportLength, ex.Message);
                 }
             }
@@ -585,8 +583,7 @@ PID_{0:X4} FEATURE={1}: {2}",
                 catch (Exception ex)
                 {
                     errors += string.Format(
-                        "
-PID_{0:X4} OUT={1} FEATURE={2}: {3}",
+                        "\r\nPID_{0:X4} OUT={1} FEATURE={2}: {3}",
                         d.ProductId, d.OutputReportLength, d.FeatureReportLength, ex.Message);
                 }
             }
@@ -1402,12 +1399,9 @@ PID_{0:X4} OUT={1} FEATURE={2}: {3}",
                     string exe = Application.ExecutablePath;
                     File.WriteAllText(
                         startupPath,
-                        "@echo off
-"
-                        + "timeout /t 3 /nobreak >nul
-"
-                        + "start "" "" + exe + "" /autoapply
-");
+                        "@echo off\r\n"
+                        + "timeout /t 3 /nobreak >nul\r\n"
+                        + "start \"\" \"" + exe + "\" /autoapply\r\n");
                 }
                 else if (File.Exists(startupPath))
                 {
@@ -1424,22 +1418,16 @@ PID_{0:X4} OUT={1} FEATURE={2}: {3}",
         {
             try
             {
-                string text = "Legacy Aura Control 1.0
-";
-                text += "Windows: " + Environment.OSVersion.ToString() + "
-";
-                text += "64-bit OS: " + Environment.Is64BitOperatingSystem.ToString() + "
-";
-                text += "Gefundene HID-Schnittstellen: " + devices.Count.ToString() + "
-
-";
+                string text = "Legacy Aura Control 1.1.0\r\n";
+                text += "Windows: " + Environment.OSVersion.ToString() + "\r\n";
+                text += "64-bit OS: " + Environment.Is64BitOperatingSystem.ToString() + "\r\n";
+                text += "Gefundene HID-Schnittstellen: " + devices.Count.ToString() + "\r\n\r\n";
 
                 for (int i = 0; i < devices.Count; i++)
                 {
                     HidDeviceInfo d = devices[i];
                     text += string.Format(
-                        "#{0}: VID_{1:X4} PID_{2:X4} OUT={3} FEATURE={4} INPUT={5} UsagePage=0x{6:X4} Usage=0x{7:X4}
-",
+                        "#{0}: VID_{1:X4} PID_{2:X4} OUT={3} FEATURE={4} INPUT={5} UsagePage=0x{6:X4} Usage=0x{7:X4}\r\n",
                         i + 1, d.VendorId, d.ProductId, d.OutputReportLength,
                         d.FeatureReportLength, d.InputReportLength, d.UsagePage, d.Usage);
                 }
@@ -1457,31 +1445,17 @@ PID_{0:X4} OUT={1} FEATURE={2}: {3}",
         {
             MessageBox.Show(
                 this,
-                "Legacy Aura Control 1.1.0
-
-"
-                + "Standalone-Steuerung für ältere ASUS ROG Aura-Core-Tastaturen.
-
-"
-                + "Funktionen:
-"
-                + "• Statische Farbe
-"
-                + "• Atmen
-"
-                + "• Farbwechsel
-"
-                + "• Regenbogen
-"
-                + "• 4-Zonen-Steuerung
-"
-                + "• Hardware-Helligkeit 0–3
-"
-                + "• Automatisches Anwenden beim Windows-Login
-"
-                + "• Tray-Icon / Infobereich mit Schnellmenü
-
-"
+                "Legacy Aura Control 1.1.0\r\n\r\n"
+                + "Standalone-Steuerung für ältere ASUS ROG Aura-Core-Tastaturen.\r\n\r\n"
+                + "Funktionen:\r\n"
+                + "• Statische Farbe\r\n"
+                + "• Atmen\r\n"
+                + "• Farbwechsel\r\n"
+                + "• Regenbogen\r\n"
+                + "• 4-Zonen-Steuerung\r\n"
+                + "• Hardware-Helligkeit 0–3\r\n"
+                + "• Automatisches Anwenden beim Windows-Login\r\n"
+                + "• Tray-Icon / Infobereich mit Schnellmenü\r\n\r\n"
                 + "Keine ASUS-Binaries erforderlich.",
                 "Über Legacy Aura Control",
                 MessageBoxButtons.OK,
