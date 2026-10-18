@@ -64,13 +64,13 @@ See [SUPPORTED_HARDWARE.md](SUPPORTED_HARDWARE.md) for more information.
 
 ## Quick start
 
-1. Click **Code → Download ZIP** on this repository.
-2. Extract the ZIP.
-3. Close other RGB applications such as Aura Core, Armoury Crate lighting control or OpenRGB.
-4. Run `Install.cmd`.
-5. Start **Legacy Aura Control** from the Desktop or Start Menu.
-6. Select an effect, color and brightness.
-7. Press **APPLY**.
+1. Open the [latest release](https://github.com/schrubber123-dev/LegacyAuraControl/releases/latest).
+2. Download `LegacyAuraControl_1.2.0.zip`.
+3. Extract the ZIP.
+4. Close other RGB applications such as Aura Core, Armoury Crate lighting control or OpenRGB.
+5. Run `Install.cmd`.
+6. Start **Legacy Aura Control** from the Desktop or Start Menu.
+7. Select an effect, color and brightness and press **APPLY**.
 
 For portable use, run `Build_and_Start.cmd` instead.
 
