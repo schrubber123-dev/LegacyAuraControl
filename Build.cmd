@@ -11,8 +11,20 @@ if not exist "%CSC%" (
   exit /b 1
 )
 
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command ^
+ "Add-Type -AssemblyName System.Drawing; " ^
+ "$bmp=[System.Drawing.Bitmap]::FromFile('assets\LegacyAura.png'); " ^
+ "$h=$bmp.GetHicon(); $ico=[System.Drawing.Icon]::FromHandle($h); " ^
+ "$fs=[System.IO.File]::Open('assets\LegacyAura.build.ico',[System.IO.FileMode]::Create); " ^
+ "$ico.Save($fs); $fs.Close(); $ico.Dispose(); $bmp.Dispose()"
+if errorlevel 1 (
+  echo ERROR: Could not generate the application icon.
+  pause
+  exit /b 1
+)
+
 "%CSC%" /nologo /target:winexe /platform:anycpu /optimize+ ^
- /win32icon:"assets\LegacyAura.ico" ^
+ /win32icon:"assets\LegacyAura.build.ico" ^
  /out:"LegacyAura.exe" ^
  /reference:System.dll ^
  /reference:System.Core.dll ^
