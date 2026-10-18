@@ -1,0 +1,41 @@
+name: Hardware compatibility report
+description: Test Legacy Aura Control on another ASUS ROG laptop
+title: "[Hardware] "
+labels: ["hardware-test"]
+body:
+  - type: input
+    id: model
+    attributes:
+      label: Exact laptop model
+      placeholder: ASUS ROG ...
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Legacy Aura Control diagnostics
+      description: Use "Diagnose kopieren" in the application.
+      render: text
+    validations:
+      required: true
+  - type: checkboxes
+    id: tests
+    attributes:
+      label: Functions tested
+      options:
+        - label: Static color works
+        - label: Breathing works
+        - label: Color cycle works
+        - label: Rainbow works
+        - label: Four-zone control works
+        - label: Brightness 0-3 works
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
