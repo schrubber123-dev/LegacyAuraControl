@@ -15,6 +15,10 @@ copy /Y "assets\LegacyAura.ico" "%TARGET%\LegacyAura.ico" >nul
 copy /Y "LICENSE" "%TARGET%\LICENSE.txt" >nul
 
 powershell.exe -NoProfile -ExecutionPolicy Bypass -Command ^
+ "Add-Type -AssemblyName System.Drawing; " ^
+ "$bmp=[System.Drawing.Bitmap]::FromFile(\'%TARGET%\\LegacyAura.png\'); " ^
+ "$h=$bmp.GetHicon(); $ico=[System.Drawing.Icon]::FromHandle($h); " ^
+ "$fs=[System.IO.File]::Open(\'%TARGET%\\LegacyAura.ico\',[System.IO.FileMode]::Create); $ico.Save($fs); $fs.Close(); $ico.Dispose(); $bmp.Dispose(); " ^
  "$w=New-Object -ComObject WScript.Shell; " ^
  "$s=$w.CreateShortcut([IO.Path]::Combine('%STARTMENU%','Legacy Aura Control.lnk')); " ^
  "$s.TargetPath='%TARGET%\LegacyAura.exe'; $s.WorkingDirectory='%TARGET%'; $s.IconLocation='%TARGET%\LegacyAura.ico'; $s.Save(); " ^
