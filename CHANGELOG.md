@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0
+
+- Public release now uses an English-only user interface.
+- Updated all UI, tray, status, diagnostics and error messages to English.
+- Kept the hardware-verified RGB/HID control path unchanged.
+- Includes tray support, four-zone control, brightness and Windows-login auto-apply.
+
 ## 1.1.0
 
 - Added Windows notification-area / system-tray icon.
