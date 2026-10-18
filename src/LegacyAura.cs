@@ -15,8 +15,8 @@ using Microsoft.Win32.SafeHandles;
 [assembly: AssemblyCompany("Legacy Aura Control Community")]
 [assembly: AssemblyProduct("Legacy Aura Control")]
 [assembly: AssemblyCopyright("Copyright 2026")]
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.2.0.0")]
+[assembly: AssemblyFileVersion("1.2.0.0")]
 
 namespace LegacyAuraControl
 {
@@ -297,7 +297,7 @@ namespace LegacyAuraControl
                     int written;
                     bool ok = WriteFile(handle, report, report.Length, out written, IntPtr.Zero);
                     if (!ok)
-                        throw new Win32Exception(Marshal.GetLastWin32Error(), "WriteFile/OUTPUT Report fehlgeschlagen");
+                        throw new Win32Exception(Marshal.GetLastWin32Error(), "WriteFile/OUTPUT report failed");
                     if (written != report.Length)
                         throw new IOException("OUTPUT Report unvollständig geschrieben (" + written.ToString() + "/" + report.Length.ToString() + " Bytes).");
 
@@ -315,14 +315,14 @@ namespace LegacyAuraControl
                     Array.Copy(data, report, Math.Min(data.Length, report.Length));
 
                     if (!HidD_SetFeature(handle, report, report.Length))
-                        throw new Win32Exception(Marshal.GetLastWin32Error(), "HidD_SetFeature fehlgeschlagen");
+                        throw new Win32Exception(Marshal.GetLastWin32Error(), "HidD_SetFeature failed");
 
                     return;
                 }
                 catch (Exception ex) { featureError = ex; }
             }
 
-            string msg = "Diese HID-Schnittstelle akzeptiert den Aura-Report nicht.";
+            string msg = "This HID interface does not accept the Aura report.";
             if (outputError != null) msg += " OUTPUT: " + outputError.Message + ".";
             if (featureError != null) msg += " FEATURE: " + featureError.Message + ".";
             throw new IOException(msg);
@@ -385,7 +385,7 @@ namespace LegacyAuraControl
                     using (SafeFileHandle handle = OpenForWrite(d.Path))
                     {
                         if (handle.IsInvalid)
-                            throw new Win32Exception(Marshal.GetLastWin32Error(), "Aura-HID konnte nicht geöffnet werden.");
+                            throw new Win32Exception(Marshal.GetLastWin32Error(), "Aura HID could not be opened.");
 
                         AuraHandshake(handle, d);
                         return;
@@ -399,13 +399,13 @@ namespace LegacyAuraControl
                 }
             }
 
-            throw new IOException("Keine der gefundenen ASUS-HID-Schnittstellen nahm den Aura-Befehl an." + errors);
+            throw new IOException("None of the detected ASUS HID interfaces accepted the Aura command." + errors);
         }
 
         private static void SendFeatureReport(SafeFileHandle handle, HidDeviceInfo d, byte[] data)
         {
             if (d.FeatureReportLength <= 0)
-                throw new IOException("Diese HID-Schnittstelle besitzt keinen Feature-Report.");
+                throw new IOException("This HID interface has no feature report.");
 
             if (data.Length > d.FeatureReportLength)
                 throw new IOException("Feature-Report ist kleiner als der zu sendende Befehl.");
@@ -414,7 +414,7 @@ namespace LegacyAuraControl
             Array.Copy(data, report, data.Length);
 
             if (!HidD_SetFeature(handle, report, report.Length))
-                throw new Win32Exception(Marshal.GetLastWin32Error(), "HidD_SetFeature fehlgeschlagen");
+                throw new Win32Exception(Marshal.GetLastWin32Error(), "HidD_SetFeature failed");
         }
 
         private static void BrightnessHandshake(SafeFileHandle handle, HidDeviceInfo d)
@@ -445,7 +445,7 @@ namespace LegacyAuraControl
                     using (SafeFileHandle handle = OpenForWrite(d.Path))
                     {
                         if (handle.IsInvalid)
-                            throw new Win32Exception(Marshal.GetLastWin32Error(), "HID konnte nicht geöffnet werden.");
+                            throw new Win32Exception(Marshal.GetLastWin32Error(), "HID interface could not be opened.");
 
                         BrightnessHandshake(handle, d);
                         SendFeatureReport(handle, d, new byte[] {
@@ -462,7 +462,7 @@ namespace LegacyAuraControl
                 }
             }
 
-            throw new IOException("Helligkeit konnte an keine passende ASUS-HID-Schnittstelle gesendet werden." + errors);
+            throw new IOException("Brightness could not be sent to any compatible ASUS HID interface." + errors);
         }
 
         private static void SendSingleEffect(
@@ -521,7 +521,7 @@ namespace LegacyAuraControl
             using (SafeFileHandle handle = OpenForWrite(d.Path))
             {
                 if (handle.IsInvalid)
-                    throw new Win32Exception(Marshal.GetLastWin32Error(), "Aura-HID konnte nicht geöffnet werden.");
+                    throw new Win32Exception(Marshal.GetLastWin32Error(), "Aura HID could not be opened.");
 
                 AuraHandshake(handle, d);
                 byte speed = SpeedByte(speedIndex);
@@ -589,7 +589,7 @@ namespace LegacyAuraControl
             }
 
             throw new IOException(
-                "Aura-Gerät erkannt, aber keine HID-Schnittstelle nahm die Farbbefehle an." +
+                "Aura device detected, but no HID interface accepted the color commands." +
                 errors);
         }
     }
@@ -753,17 +753,17 @@ namespace LegacyAuraControl
         {
             trayMenu = new ContextMenuStrip();
 
-            ToolStripMenuItem openItem = new ToolStripMenuItem("Öffnen");
+            ToolStripMenuItem openItem = new ToolStripMenuItem("Open");
             openItem.Font = new Font(openItem.Font, FontStyle.Bold);
             openItem.Click += delegate { ShowFromTray(); };
 
-            ToolStripMenuItem applyItem = new ToolStripMenuItem("Letzte Einstellung anwenden");
+            ToolStripMenuItem applyItem = new ToolStripMenuItem("Apply last setting");
             applyItem.Click += delegate {
                 if (!Visible) ShowInTaskbar = false;
                 ApplySavedFromTray();
             };
 
-            ToolStripMenuItem exitItem = new ToolStripMenuItem("Beenden");
+            ToolStripMenuItem exitItem = new ToolStripMenuItem("Exit");
             exitItem.Click += delegate {
                 reallyExit = true;
                 if (trayIcon != null) trayIcon.Visible = false;
@@ -807,7 +807,7 @@ namespace LegacyAuraControl
             if (showBalloon && trayIcon != null)
             {
                 trayIcon.BalloonTipTitle = "Legacy Aura Control";
-                trayIcon.BalloonTipText = "Läuft weiter im Infobereich.";
+                trayIcon.BalloonTipText = "Legacy Aura Control is still running in the notification area.";
                 trayIcon.BalloonTipIcon = ToolTipIcon.Info;
                 trayIcon.ShowBalloonTip(1800);
             }
@@ -823,7 +823,7 @@ namespace LegacyAuraControl
                     if (trayIcon != null)
                     {
                         trayIcon.BalloonTipTitle = "Legacy Aura Control";
-                        trayIcon.BalloonTipText = "Kein kompatibles Aura-Gerät gefunden.";
+                        trayIcon.BalloonTipText = "No compatible Aura device found.";
                         trayIcon.BalloonTipIcon = ToolTipIcon.Warning;
                         trayIcon.ShowBalloonTip(2200);
                     }
@@ -846,7 +846,7 @@ namespace LegacyAuraControl
                 if (trayIcon != null)
                 {
                     trayIcon.BalloonTipTitle = "Legacy Aura Control";
-                    trayIcon.BalloonTipText = "Letzte Beleuchtungseinstellung angewendet.";
+                    trayIcon.BalloonTipText = "Last lighting setting applied.";
                     trayIcon.BalloonTipIcon = ToolTipIcon.Info;
                     trayIcon.ShowBalloonTip(1600);
                 }
@@ -856,7 +856,7 @@ namespace LegacyAuraControl
                 if (trayIcon != null)
                 {
                     trayIcon.BalloonTipTitle = "Legacy Aura Control";
-                    trayIcon.BalloonTipText = "Anwenden fehlgeschlagen: " + ex.Message;
+                    trayIcon.BalloonTipText = "Apply failed: " + ex.Message;
                     trayIcon.BalloonTipIcon = ToolTipIcon.Error;
                     trayIcon.ShowBalloonTip(3000);
                 }
@@ -892,7 +892,7 @@ namespace LegacyAuraControl
 
         private void BuildUi()
         {
-            Text = "Legacy Aura Control 1.1.0";
+            Text = "Legacy Aura Control 1.2.0";
             Width = 900;
             Height = 665;
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -920,15 +920,15 @@ namespace LegacyAuraControl
             title.ForeColor = Color.White;
             Controls.Add(title);
 
-            Label version = MakeLabel("1.1  •  Standalone Aura Core replacement", 29, 55, 420);
+            Label version = MakeLabel("1.2  •  Standalone Aura Core replacement", 29, 55, 420);
             version.ForeColor = Color.FromArgb(165, 165, 170);
             Controls.Add(version);
 
-            aboutButton = MakeDarkButton("Info", 788, 23, 76, 30);
+            aboutButton = MakeDarkButton("About", 788, 23, 76, 30);
             aboutButton.Click += delegate { ShowAbout(); };
             Controls.Add(aboutButton);
 
-            GroupBox devGroup = MakeGroup("Aura-Core-Gerät", 24, 88, 840, 88);
+            GroupBox devGroup = MakeGroup("Aura Core device", 24, 88, 840, 88);
             Controls.Add(devGroup);
 
             deviceBox = new ComboBox();
@@ -938,61 +938,61 @@ namespace LegacyAuraControl
             deviceBox.DropDownStyle = ComboBoxStyle.DropDownList;
             devGroup.Controls.Add(deviceBox);
 
-            refreshButton = MakeDarkButton("Neu suchen", 579, 30, 102, 30);
+            refreshButton = MakeDarkButton("Scan", 579, 30, 102, 30);
             refreshButton.Click += delegate { RefreshDevices(); };
             devGroup.Controls.Add(refreshButton);
 
-            initializeButton = MakeDarkButton("Initialisieren", 690, 30, 126, 30);
+            initializeButton = MakeDarkButton("Initialize", 690, 30, 126, 30);
             initializeButton.Click += delegate { InitializeKeyboard(); };
             devGroup.Controls.Add(initializeButton);
 
-            GroupBox effectGroup = MakeGroup("Beleuchtung", 24, 190, 312, 245);
+            GroupBox effectGroup = MakeGroup("Lighting", 24, 190, 312, 245);
             Controls.Add(effectGroup);
 
-            effectGroup.Controls.Add(MakeLabel("Effekt", 18, 31, 85));
+            effectGroup.Controls.Add(MakeLabel("Effect", 18, 31, 85));
             effectBox = new ComboBox();
             effectBox.Left = 112;
             effectBox.Top = 28;
             effectBox.Width = 175;
             effectBox.DropDownStyle = ComboBoxStyle.DropDownList;
             effectBox.Items.AddRange(new object[] {
-                "Statisch",
-                "Atmen",
-                "Farbwechsel",
-                "Regenbogen-Zyklus",
-                "Regenbogen (4 Zonen)"
+                "Static",
+                "Breathing",
+                "Color cycle",
+                "Rainbow cycle",
+                "Rainbow (4 zones)"
             });
             effectBox.SelectedIndex = 0;
             effectBox.SelectedIndexChanged += delegate { UpdateModeUi(); };
             effectGroup.Controls.Add(effectBox);
 
-            effectGroup.Controls.Add(MakeLabel("Tempo", 18, 72, 85));
+            effectGroup.Controls.Add(MakeLabel("Speed", 18, 72, 85));
             speedBox = new ComboBox();
             speedBox.Left = 112;
             speedBox.Top = 69;
             speedBox.Width = 175;
             speedBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            speedBox.Items.AddRange(new object[] { "Langsam", "Normal", "Schnell" });
+            speedBox.Items.AddRange(new object[] { "Slow", "Normal", "Fast" });
             speedBox.SelectedIndex = 1;
             effectGroup.Controls.Add(speedBox);
 
-            effectGroup.Controls.Add(MakeLabel("Helligkeit", 18, 113, 85));
+            effectGroup.Controls.Add(MakeLabel("Brightness", 18, 113, 85));
             brightnessBox = new ComboBox();
             brightnessBox.Left = 112;
             brightnessBox.Top = 110;
             brightnessBox.Width = 175;
             brightnessBox.DropDownStyle = ComboBoxStyle.DropDownList;
             brightnessBox.Items.AddRange(new object[] {
-                "Aus (0)",
-                "Niedrig (1)",
-                "Mittel (2)",
-                "Hoch (3)"
+                "Off (0)",
+                "Low (1)",
+                "Medium (2)",
+                "High (3)"
             });
             brightnessBox.SelectedIndex = 3;
             effectGroup.Controls.Add(brightnessBox);
 
             fourZoneCheck = new CheckBox();
-            fourZoneCheck.Text = "4-Zonen-Modus";
+            fourZoneCheck.Text = "4-zone mode";
             fourZoneCheck.Left = 19;
             fourZoneCheck.Top = 154;
             fourZoneCheck.Width = 180;
@@ -1001,13 +1001,13 @@ namespace LegacyAuraControl
             effectGroup.Controls.Add(fourZoneCheck);
 
             modeHintLabel = MakeLabel(
-                "Statisch und Atmen können einzeln oder in 4 Zonen gesteuert werden.",
+                "Static and Breathing can be controlled as one zone or four zones.",
                 18, 184, 270);
             modeHintLabel.Height = 42;
             modeHintLabel.ForeColor = Color.FromArgb(145, 145, 150);
             effectGroup.Controls.Add(modeHintLabel);
 
-            GroupBox colorsGroup = MakeGroup("Farben", 352, 190, 512, 300);
+            GroupBox colorsGroup = MakeGroup("Colors", 352, 190, 512, 300);
             Controls.Add(colorsGroup);
 
             for (int i = 0; i < 4; i++)
@@ -1024,13 +1024,13 @@ namespace LegacyAuraControl
                 zonePanels[i].BorderStyle = BorderStyle.FixedSingle;
                 colorsGroup.Controls.Add(zonePanels[i]);
 
-                zoneButtons[i] = MakeDarkButton("Farbe wählen", 187, y, 118, 30);
+                zoneButtons[i] = MakeDarkButton("Choose color", 187, y, 118, 30);
                 int ix = i;
                 zoneButtons[i].Click += delegate { ChooseZoneColor(ix); };
                 colorsGroup.Controls.Add(zoneButtons[i]);
             }
 
-            colorsGroup.Controls.Add(MakeLabel("2. Atemfarbe", 330, 37, 145));
+            colorsGroup.Controls.Add(MakeLabel("2nd breath color", 330, 37, 145));
             breathSecondPanel = new Panel();
             breathSecondPanel.Left = 342;
             breathSecondPanel.Top = 69;
@@ -1040,19 +1040,19 @@ namespace LegacyAuraControl
             breathSecondPanel.BorderStyle = BorderStyle.FixedSingle;
             colorsGroup.Controls.Add(breathSecondPanel);
 
-            breathSecondButton = MakeDarkButton("Farbe wählen", 326, 111, 118, 30);
+            breathSecondButton = MakeDarkButton("Choose color", 326, 111, 118, 30);
             breathSecondButton.Click += delegate { ChooseBreathSecond(); };
             colorsGroup.Controls.Add(breathSecondButton);
 
             Label hint = MakeLabel(
-                "Die zweite Farbe wird nur beim Effekt \"Atmen\" im Ein-Zonen-Modus verwendet.",
+                "The second color is only used by Breathing in single-zone mode.",
                 324, 153, 165);
             hint.Height = 78;
             hint.ForeColor = Color.FromArgb(145, 145, 150);
             colorsGroup.Controls.Add(hint);
 
             applyButton = new Button();
-            applyButton.Text = "ANWENDEN";
+            applyButton.Text = "APPLY";
             applyButton.Left = 24;
             applyButton.Top = 452;
             applyButton.Width = 312;
@@ -1068,7 +1068,7 @@ namespace LegacyAuraControl
             Controls.Add(applyButton);
 
             autoApplyCheck = new CheckBox();
-            autoApplyCheck.Text = "Letzte Einstellung beim Windows-Login automatisch anwenden";
+            autoApplyCheck.Text = "Apply last setting automatically at Windows login";
             autoApplyCheck.Left = 24;
             autoApplyCheck.Top = 525;
             autoApplyCheck.Width = 430;
@@ -1078,19 +1078,19 @@ namespace LegacyAuraControl
             };
             Controls.Add(autoApplyCheck);
 
-            copyDiagButton = MakeDarkButton("Diagnose kopieren", 704, 517, 160, 32);
+            copyDiagButton = MakeDarkButton("Copy diagnostics", 704, 517, 160, 32);
             copyDiagButton.Click += delegate { CopyDiagnostics(); };
             Controls.Add(copyDiagButton);
 
             Label note = MakeLabel(
-                "Kein Aura Core, Aura Service oder Armoury Crate erforderlich. "
-                + "Beim Schließen läuft Legacy Aura Control im Infobereich weiter.",
+                "No Aura Core, Aura Service or Armoury Crate required. "
+                + "Closing the window keeps Legacy Aura Control running in the notification area.",
                 24, 558, 840);
             note.Height = 38;
             note.ForeColor = Color.FromArgb(150, 150, 155);
             Controls.Add(note);
 
-            statusLabel = MakeLabel("Bereit.", 24, 608, 840);
+            statusLabel = MakeLabel("Ready.", 24, 608, 840);
             statusLabel.Height = 28;
             statusLabel.ForeColor = Color.FromArgb(150, 220, 160);
             Controls.Add(statusLabel);
@@ -1111,20 +1111,20 @@ namespace LegacyAuraControl
                     deviceBox.SelectedIndex = 0;
                     HidDeviceInfo d = devices[0];
                     SetStatus(string.Format(
-                        "Bereit: VID_{0:X4} PID_{1:X4}  |  OUT {2} B  |  FEATURE {3} B  |  {4} HID-Schnittstelle(n)",
+                        "Ready: VID_{0:X4} PID_{1:X4}  |  OUT {2} B  |  FEATURE {3} B  |  {4} HID interface(s)",
                         d.VendorId, d.ProductId, d.OutputReportLength,
                         d.FeatureReportLength, devices.Count), true);
                 }
                 else
                 {
                     SetStatus(
-                        "Kein unterstütztes Legacy-Aura-Core-Gerät gefunden "
+                        "No supported legacy Aura Core device found "
                         + "(erwartet: ASUS PID 1854 / 1866 / 1869).", false);
                 }
             }
             catch (Exception ex)
             {
-                SetStatus("Gerätesuche fehlgeschlagen: " + ex.Message, false);
+                SetStatus("Device scan failed: " + ex.Message, false);
             }
         }
 
@@ -1140,18 +1140,18 @@ namespace LegacyAuraControl
             HidDeviceInfo d = SelectedDevice();
             if (d == null)
             {
-                SetStatus("Kein Gerät ausgewählt.", false);
+                SetStatus("No device selected.", false);
                 return;
             }
 
             try
             {
                 AuraHid.Initialize(d);
-                SetStatus("Aura-Core-Controller initialisiert.", true);
+                SetStatus("Aura Core controller initialized.", true);
             }
             catch (Exception ex)
             {
-                SetStatus("Initialisierung fehlgeschlagen: " + ex.Message, false);
+                SetStatus("Initialization failed: " + ex.Message, false);
             }
         }
 
@@ -1160,7 +1160,7 @@ namespace LegacyAuraControl
             HidDeviceInfo d = SelectedDevice();
             if (d == null)
             {
-                SetStatus("Kein kompatibles Aura-Gerät gefunden.", false);
+                SetStatus("No compatible Aura device found.", false);
                 return;
             }
 
@@ -1198,21 +1198,21 @@ namespace LegacyAuraControl
 
             if (colorOk && brightnessOk)
             {
-                SetStatus("Farbe/Effekt und Helligkeit erfolgreich angewendet.", true);
+                SetStatus("Color/effect and brightness applied successfully.", true);
             }
             else if (colorOk)
             {
-                SetStatus("Farbe/Effekt OK. Helligkeit fehlgeschlagen: " + brightnessError, false);
+                SetStatus("Color/effect OK. Brightness failed: " + brightnessError, false);
             }
             else if (brightnessOk)
             {
-                SetStatus("Helligkeit OK. Farbe/Effekt fehlgeschlagen: " + colorError, false);
+                SetStatus("Brightness OK. Color/effect failed: " + colorError, false);
             }
             else
             {
                 SetStatus(
-                    "Anwenden fehlgeschlagen. Farbe: " + colorError
-                    + " | Helligkeit: " + brightnessError, false);
+                    "Apply failed. Color: " + colorError
+                    + " | Brightness: " + brightnessError, false);
             }
         }
 
@@ -1276,13 +1276,13 @@ namespace LegacyAuraControl
             if (modeHintLabel != null)
             {
                 if (effect == 4)
-                    modeHintLabel.Text = "Feste Regenbogenfarben über die vier Tastaturzonen.";
+                    modeHintLabel.Text = "Fixed rainbow colors across the four keyboard zones.";
                 else if (effect == 3)
-                    modeHintLabel.Text = "Animierter Regenbogen-Effekt des Aura-Core-Controllers.";
+                    modeHintLabel.Text = "Animated rainbow effect from the Aura Core controller.";
                 else if (effect == 2)
-                    modeHintLabel.Text = "Automatischer Farbwechsel. Eigene Zonenfarben werden dabei ignoriert.";
+                    modeHintLabel.Text = "Automatic color cycle. Custom zone colors are ignored.";
                 else
-                    modeHintLabel.Text = "Statisch und Atmen können einzeln oder in 4 Zonen gesteuert werden.";
+                    modeHintLabel.Text = "Static and Breathing can be controlled as one zone or four zones.";
             }
         }
 
@@ -1410,7 +1410,7 @@ namespace LegacyAuraControl
             }
             catch (Exception ex)
             {
-                SetStatus("Autostart konnte nicht geändert werden: " + ex.Message, false);
+                SetStatus("Startup setting could not be changed: " + ex.Message, false);
             }
         }
 
@@ -1418,10 +1418,10 @@ namespace LegacyAuraControl
         {
             try
             {
-                string text = "Legacy Aura Control 1.1.0\r\n";
+                string text = "Legacy Aura Control 1.2.0\r\n";
                 text += "Windows: " + Environment.OSVersion.ToString() + "\r\n";
                 text += "64-bit OS: " + Environment.Is64BitOperatingSystem.ToString() + "\r\n";
-                text += "Gefundene HID-Schnittstellen: " + devices.Count.ToString() + "\r\n\r\n";
+                text += "Detected HID interfaces: " + devices.Count.ToString() + "\r\n\r\n";
 
                 for (int i = 0; i < devices.Count; i++)
                 {
@@ -1433,11 +1433,11 @@ namespace LegacyAuraControl
                 }
 
                 Clipboard.SetText(text);
-                SetStatus("Diagnoseinformationen wurden in die Zwischenablage kopiert.", true);
+                SetStatus("Diagnostics copied to the clipboard.", true);
             }
             catch (Exception ex)
             {
-                SetStatus("Diagnose konnte nicht kopiert werden: " + ex.Message, false);
+                SetStatus("Diagnostics could not be copied: " + ex.Message, false);
             }
         }
 
@@ -1445,19 +1445,19 @@ namespace LegacyAuraControl
         {
             MessageBox.Show(
                 this,
-                "Legacy Aura Control 1.1.0\r\n\r\n"
-                + "Standalone-Steuerung für ältere ASUS ROG Aura-Core-Tastaturen.\r\n\r\n"
+                "Legacy Aura Control 1.2.0\r\n\r\n"
+                + "Standalone control for legacy ASUS ROG Aura Core keyboards.\r\n\r\n"
                 + "Funktionen:\r\n"
-                + "• Statische Farbe\r\n"
-                + "• Atmen\r\n"
-                + "• Farbwechsel\r\n"
-                + "• Regenbogen\r\n"
-                + "• 4-Zonen-Steuerung\r\n"
-                + "• Hardware-Helligkeit 0–3\r\n"
-                + "• Automatisches Anwenden beim Windows-Login\r\n"
-                + "• Tray-Icon / Infobereich mit Schnellmenü\r\n\r\n"
-                + "Keine ASUS-Binaries erforderlich.",
-                "Über Legacy Aura Control",
+                + "• Static color\r\n"
+                + "• Breathing\r\n"
+                + "• Color cycle\r\n"
+                + "• Rainbow\r\n"
+                + "• 4-zone control\r\n"
+                + "• Hardware brightness 0–3\r\n"
+                + "• Automatic apply at Windows login\r\n"
+                + "• Tray icon / notification area with quick menu\r\n\r\n"
+                + "No ASUS binaries required.",
+                "About Legacy Aura Control",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
         }
