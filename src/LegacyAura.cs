@@ -627,13 +627,65 @@ PID_{0:X4} OUT={1} FEATURE={2}: {3}",
         private bool reallyExit;
         private bool startingHidden;
 
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern bool DestroyIcon(IntPtr handle);
+
+        private Icon LoadAppIcon()
+        {
+            try
+            {
+                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string[] icoPaths = new string[] {
+                    Path.Combine(baseDir, "LegacyAura.ico"),
+                    Path.Combine(baseDir, "assets", "LegacyAura.ico")
+                };
+
+                for (int i = 0; i < icoPaths.Length; i++)
+                {
+                    if (File.Exists(icoPaths[i]))
+                        return new Icon(icoPaths[i]);
+                }
+
+                string[] pngPaths = new string[] {
+                    Path.Combine(baseDir, "LegacyAura.png"),
+                    Path.Combine(baseDir, "assets", "LegacyAura.png")
+                };
+
+                for (int i = 0; i < pngPaths.Length; i++)
+                {
+                    if (!File.Exists(pngPaths[i])) continue;
+
+                    using (Bitmap bmp = new Bitmap(pngPaths[i]))
+                    {
+                        IntPtr hIcon = bmp.GetHicon();
+                        try
+                        {
+                            using (Icon temp = Icon.FromHandle(hIcon))
+                                return (Icon)temp.Clone();
+                        }
+                        finally
+                        {
+                            DestroyIcon(hIcon);
+                        }
+                    }
+                }
+
+                return Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+            }
+            catch
+            {
+                try { return Icon.ExtractAssociatedIcon(Application.ExecutablePath); }
+                catch { return null; }
+            }
+        }
+
         public MainForm()
         {
             // Use the icon embedded into LegacyAura.exe for the window/title bar
             // and the taskbar. WinForms otherwise falls back to the generic app icon.
             try
             {
-                Icon appIcon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
+                Icon appIcon = LoadAppIcon();
                 if (appIcon != null)
                 {
                     this.Icon = appIcon;
@@ -871,7 +923,7 @@ PID_{0:X4} OUT={1} FEATURE={2}: {3}",
             title.ForeColor = Color.White;
             Controls.Add(title);
 
-            Label version = MakeLabel("1.0  •  Standalone Aura Core replacement", 29, 55, 420);
+            Label version = MakeLabel("1.1  •  Standalone Aura Core replacement", 29, 55, 420);
             version.ForeColor = Color.FromArgb(165, 165, 170);
             Controls.Add(version);
 
