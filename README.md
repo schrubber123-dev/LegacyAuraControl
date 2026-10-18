@@ -63,8 +63,8 @@ See [SUPPORTED_HARDWARE.md](SUPPORTED_HARDWARE.md) for more information.
 
 ## Quick start
 
-1. Download the latest release ZIP from **Releases**.
-2. Extract it.
+1. Click **Code → Download ZIP** on this repository.
+2. Extract the ZIP.
 3. Close other RGB applications such as Aura Core, Armoury Crate lighting control or OpenRGB.
 4. Run `Install.cmd`.
 5. Start **Legacy Aura Control** from the Desktop or Start Menu.
