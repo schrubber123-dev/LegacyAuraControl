@@ -11,5 +11,5 @@ del /Q "%DESKTOP%\Legacy Aura Control.lnk" >nul 2>&1
 del /Q "%STARTUP%\LegacyAuraControl.cmd" >nul 2>&1
 rmdir /S /Q "%TARGET%" >nul 2>&1
 
-echo Legacy Aura Control wurde deinstalliert.
+echo Legacy Aura Control has been uninstalled.
 pause
