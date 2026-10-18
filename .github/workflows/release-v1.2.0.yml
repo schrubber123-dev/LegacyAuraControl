@@ -61,9 +61,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release view v1.2.0 *> $null
-          if ($LASTEXITCODE -eq 0) {
-            gh release upload v1.2.0 LegacyAuraControl_1.2.0.zip LegacyAura.exe --clobber
-          } else {
-            gh release create v1.2.0 LegacyAuraControl_1.2.0.zip LegacyAura.exe --target "${{ github.sha }}" --title "Legacy Aura Control v1.2.0" --notes "English-only public release. Includes direct legacy ASUS Aura Core HID control, static/breathing/color-cycle/rainbow effects, four-zone control, hardware brightness, tray support, diagnostics, and Windows-login auto-apply. Confirmed on ASUS ROG GU501GM (VID 0B05 / PID 1866)."
-          }
+          gh release create v1.2.0 LegacyAuraControl_1.2.0.zip LegacyAura.exe --target "${{ github.sha }}" --title "Legacy Aura Control v1.2.0" --notes "English-only public release. Includes direct legacy ASUS Aura Core HID control, static/breathing/color-cycle/rainbow effects, four-zone control, hardware brightness, tray support, diagnostics, and Windows-login auto-apply. Confirmed on ASUS ROG GU501GM (VID 0B05 / PID 1866)."
