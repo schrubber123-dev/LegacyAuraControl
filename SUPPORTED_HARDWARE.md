@@ -1,5 +1,7 @@
 # Supported hardware
 
+Legacy Aura Control is an independent, unofficial community project. Product names are used only for compatibility identification; no affiliation or endorsement by ASUS is implied.
+
 ## Confirmed
 
 ### ASUS ROG GU501GM
@@ -31,7 +33,7 @@ Legacy Aura Control also recognizes:
 - `0B05:1854`
 - `0B05:1869`
 
-These IDs are associated with legacy ASUS Aura Core hardware in public implementations, but v1.1.0 does not claim them as confirmed until a real user report verifies operation.
+These IDs are associated with legacy ASUS Aura Core hardware in public implementations, but v1.2.1 does not claim them as confirmed until a real user report verifies operation.
 
 ## Reporting another model
 

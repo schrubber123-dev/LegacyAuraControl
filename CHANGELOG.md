@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.1
+
+- Added a prominent independent/unofficial project notice and trademark clarification.
+- Added `DISCLAIMER.md` and expanded third-party attribution.
+- Included the full MIT notice for the `rogauracore` protocol research reference.
+- Release packages now include the disclaimer and third-party notices.
+- Cleaned remaining German UI strings and reduced unnecessary product branding in internal labels.
+- No hardware protocol behavior was intentionally changed.
+
 ## 1.2.0
 
 - Public release now uses an English-only user interface.

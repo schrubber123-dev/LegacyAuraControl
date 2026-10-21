@@ -1,23 +1,42 @@
-```
-THIRD PARTY / PROTOCOL NOTES
-============================
+# Third-party notices and protocol research references
 
-Legacy Aura Control contains no ASUS binaries, DLLs, installers or artwork.
+Legacy Aura Control is an independent community project. It does not redistribute ASUS binaries, DLLs, SDKs, firmware, drivers, installers, logos, or artwork.
 
-The legacy Aura Core HID protocol was independently implemented using public
-Windows HID APIs and publicly documented/open-source protocol information.
+The application uses standard Windows HID/SetupAPI interfaces. Compatibility behavior for the legacy keyboard lighting protocol was developed from testing on compatible hardware and from publicly available protocol information and open-source implementations.
 
-Protocol reference:
-rogauracore
-Copyright (c) 2019 Will Roberts and contributors
-https://github.com/wroberts/rogauracore
-MIT License
+## rogauracore
 
-Known command families used by this program:
-- Aura effect report: 0x5D
-- Keyboard brightness report: 0x5A BA C5 C4 <level 0..3>
-- Legacy ASUS HID initialization handshake
+Protocol-level compatibility research was informed by:
 
-ASUS, ROG and Aura are trademarks of their respective owner. This project is
-not affiliated with or endorsed by ASUS.
-```
+**rogauracore**  
+Copyright (c) 2019 Will Roberts and contributors  
+https://github.com/wroberts/rogauracore  
+License: MIT
+
+The protocol values used for legacy effects, brightness, initialization and compatible product IDs are hardware/protocol compatibility information. No rogauracore executable or library is distributed with Legacy Aura Control. To preserve attribution conservatively, the rogauracore MIT license notice is reproduced below.
+
+### MIT License notice for rogauracore
+
+Copyright (c) 2019 Will Roberts
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+## Trademarks and product names
+
+ASUS, ROG, Republic of Gamers, Aura, Aura Core, Armoury Crate, and other product or company names mentioned by this project are trademarks, service marks, or product names of their respective owners. They are used only to identify compatibility or interoperability. Their use does not imply affiliation, sponsorship, authorization, or endorsement.

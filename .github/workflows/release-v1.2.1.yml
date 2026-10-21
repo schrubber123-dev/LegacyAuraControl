@@ -1,0 +1,67 @@
+name: Publish v1.2.1
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - ".github/workflows/release-v1.2.1.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Windows icon
+        shell: powershell
+        run: |
+          Add-Type -AssemblyName System.Drawing
+          $bmp=[System.Drawing.Bitmap]::FromFile('assets\\LegacyAura.png')
+          $h=$bmp.GetHicon()
+          $ico=[System.Drawing.Icon]::FromHandle($h)
+          $fs=[System.IO.File]::Open('assets\\LegacyAura.build.ico',[System.IO.FileMode]::Create)
+          $ico.Save($fs)
+          $fs.Close()
+          $ico.Dispose()
+          $bmp.Dispose()
+
+      - name: Compile Legacy Aura Control
+        shell: cmd
+        run: |
+          "%WINDIR%\\Microsoft.NET\\Framework64\\v4.0.30319\\csc.exe" /nologo /target:winexe /platform:anycpu /optimize+ /win32icon:"assets\\LegacyAura.build.ico" /out:"LegacyAura.exe" /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll "src\\LegacyAura.cs"
+
+      - name: Build release package
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          New-Item -ItemType Directory -Force -Path dist\\assets | Out-Null
+          New-Item -ItemType Directory -Force -Path dist\\src | Out-Null
+          Copy-Item LegacyAura.exe dist\\LegacyAura.exe
+          Copy-Item Install.cmd dist\\Install.cmd
+          Copy-Item Uninstall.cmd dist\\Uninstall.cmd
+          Copy-Item Build.cmd dist\\Build.cmd
+          Copy-Item Build_and_Start.cmd dist\\Build_and_Start.cmd
+          Copy-Item README.md dist\\README.md
+          Copy-Item LICENSE dist\\LICENSE
+          Copy-Item DISCLAIMER.md dist\\DISCLAIMER.md
+          Copy-Item THIRD_PARTY_NOTICES.md dist\\THIRD_PARTY_NOTICES.md
+          Copy-Item CHANGELOG.md dist\\CHANGELOG.md
+          Copy-Item SUPPORTED_HARDWARE.md dist\\SUPPORTED_HARDWARE.md
+          Copy-Item TROUBLESHOOTING.md dist\\TROUBLESHOOTING.md
+          Copy-Item assets\\LegacyAura.build.ico dist\\assets\\LegacyAura.ico
+          Copy-Item assets\\LegacyAura.png dist\\assets\\LegacyAura.png
+          Copy-Item src\\LegacyAura.cs dist\\src\\LegacyAura.cs
+          Compress-Archive -Path dist\\* -DestinationPath LegacyAuraControl_1.2.1.zip -Force
+
+      - name: Publish GitHub Release
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v1.2.1 LegacyAuraControl_1.2.1.zip LegacyAura.exe --target "${{ github.sha }}" --title "Legacy Aura Control v1.2.1" --notes "Independent community release. Adds clearer trademark/disclaimer language and complete third-party attribution while keeping the hardware-verified HID control path unchanged. Includes static/breathing/color-cycle/rainbow effects, four-zone control, hardware brightness, tray support, diagnostics, and Windows-login auto-apply. Confirmed on ASUS ROG GU501GM (VID 0B05 / PID 1866)."

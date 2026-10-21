@@ -1,4 +1,12 @@
-﻿using System;
+﻿/*
+ * Legacy Aura Control
+ * Independent, unofficial community project. Not affiliated with, authorized,
+ * sponsored, or endorsed by ASUS or ASUSTeK Computer Inc.
+ * Compatibility names are used only to identify supported hardware.
+ * Protocol research references and third-party notices: THIRD_PARTY_NOTICES.md
+ */
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -11,12 +19,12 @@ using Microsoft.Win32.SafeHandles;
 
 
 [assembly: AssemblyTitle("Legacy Aura Control")]
-[assembly: AssemblyDescription("Standalone RGB control for legacy ASUS ROG Aura Core keyboards")]
+[assembly: AssemblyDescription("Unofficial RGB control for compatible legacy ASUS ROG laptop keyboards")]
 [assembly: AssemblyCompany("Legacy Aura Control Community")]
 [assembly: AssemblyProduct("Legacy Aura Control")]
 [assembly: AssemblyCopyright("Copyright 2026")]
-[assembly: AssemblyVersion("1.2.0.0")]
-[assembly: AssemblyFileVersion("1.2.0.0")]
+[assembly: AssemblyVersion("1.2.1.0")]
+[assembly: AssemblyFileVersion("1.2.1.0")]
 
 namespace LegacyAuraControl
 {
@@ -35,7 +43,7 @@ namespace LegacyAuraControl
         public override string ToString()
         {
             return string.Format(
-                "ASUS Aura Core  VID_{0:X4}&PID_{1:X4}  | OUT {2}  FEATURE {3}",
+                "Compatible legacy RGB HID  VID_{0:X4}&PID_{1:X4}  | OUT {2}  FEATURE {3}",
                 VendorId, ProductId, OutputReportLength, FeatureReportLength);
         }
     }
@@ -50,7 +58,7 @@ namespace LegacyAuraControl
         private const uint FILE_SHARE_WRITE = 0x00000002;
         private const uint OPEN_EXISTING = 3;
 
-        public const ushort ASUS_VID = 0x0B05;
+        public const ushort TARGET_VENDOR_ID = 0x0B05;
         private static readonly ushort[] SupportedPids = new ushort[] { 0x1854, 0x1866, 0x1869 };
 
         [StructLayout(LayoutKind.Sequential)]
@@ -182,7 +190,7 @@ namespace LegacyAuraControl
                                         attrs.Size = Marshal.SizeOf(typeof(HIDD_ATTRIBUTES));
 
                                         if (HidD_GetAttributes(handle, ref attrs) &&
-                                            attrs.VendorID == ASUS_VID &&
+                                            attrs.VendorID == TARGET_VENDOR_ID &&
                                             IsSupportedPid(attrs.ProductID))
                                         {
                                             int featureLen = 0;
@@ -286,7 +294,7 @@ namespace LegacyAuraControl
             Exception outputError = null;
             Exception featureError = null;
 
-            // ASUS Aura Core under Windows normally uses HID OUTPUT reports for 0x5D.
+            // This legacy lighting protocol normally uses HID OUTPUT reports for 0x5D.
             if (d.OutputReportLength >= 17)
             {
                 try
@@ -892,7 +900,7 @@ namespace LegacyAuraControl
 
         private void BuildUi()
         {
-            Text = "Legacy Aura Control 1.2.0";
+            Text = "Legacy Aura Control 1.2.1";
             Width = 900;
             Height = 665;
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -1119,7 +1127,7 @@ namespace LegacyAuraControl
                 {
                     SetStatus(
                         "No supported legacy Aura Core device found "
-                        + "(erwartet: ASUS PID 1854 / 1866 / 1869).", false);
+                        + "(expected vendor PID 1854 / 1866 / 1869).", false);
                 }
             }
             catch (Exception ex)
@@ -1147,7 +1155,7 @@ namespace LegacyAuraControl
             try
             {
                 AuraHid.Initialize(d);
-                SetStatus("Aura Core controller initialized.", true);
+                SetStatus("Legacy lighting controller initialized.", true);
             }
             catch (Exception ex)
             {
@@ -1278,7 +1286,7 @@ namespace LegacyAuraControl
                 if (effect == 4)
                     modeHintLabel.Text = "Fixed rainbow colors across the four keyboard zones.";
                 else if (effect == 3)
-                    modeHintLabel.Text = "Animated rainbow effect from the Aura Core controller.";
+                    modeHintLabel.Text = "Animated rainbow effect from the legacy lighting controller.";
                 else if (effect == 2)
                     modeHintLabel.Text = "Automatic color cycle. Custom zone colors are ignored.";
                 else
@@ -1418,7 +1426,7 @@ namespace LegacyAuraControl
         {
             try
             {
-                string text = "Legacy Aura Control 1.2.0\r\n";
+                string text = "Legacy Aura Control 1.2.1\r\n";
                 text += "Windows: " + Environment.OSVersion.ToString() + "\r\n";
                 text += "64-bit OS: " + Environment.Is64BitOperatingSystem.ToString() + "\r\n";
                 text += "Detected HID interfaces: " + devices.Count.ToString() + "\r\n\r\n";
@@ -1445,9 +1453,9 @@ namespace LegacyAuraControl
         {
             MessageBox.Show(
                 this,
-                "Legacy Aura Control 1.2.0\r\n\r\n"
-                + "Standalone control for legacy ASUS ROG Aura Core keyboards.\r\n\r\n"
-                + "Funktionen:\r\n"
+                "Legacy Aura Control 1.2.1\r\n\r\n"
+                + "Unofficial control for compatible legacy ASUS ROG laptop keyboards.\r\n" + "Independent community project; not affiliated with or endorsed by ASUS.\r\n\r\n"
+                + "Features:\r\n"
                 + "• Static color\r\n"
                 + "• Breathing\r\n"
                 + "• Color cycle\r\n"

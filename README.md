@@ -4,9 +4,11 @@
 
 # Legacy Aura Control
 
-**Standalone RGB control for legacy ASUS ROG Aura Core laptop keyboards on modern Windows.**
+**Unofficial, independent RGB control for compatible legacy ASUS ROG laptop keyboards on modern Windows.**
 
-[![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)](#release)
+> **Independent community project:** Legacy Aura Control is not affiliated with, authorized, sponsored, or endorsed by ASUS or ASUSTeK Computer Inc. Product and brand names are used only to identify compatible hardware.
+
+[![Version](https://img.shields.io/badge/version-1.2.1-blue.svg)](#release)
 [![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4.svg)](#compatibility)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Hardware tested](https://img.shields.io/badge/tested-GU501GM-success.svg)](#confirmed-hardware)  
@@ -18,7 +20,7 @@
 
 ## Why this exists
 
-Older ASUS ROG laptops can still have fully working Aura Core RGB keyboards, while the discontinued **ROG Aura Core / Aura Service** software stack may no longer work correctly after a clean Windows 11 installation.
+Older ASUS ROG laptops can still have fully working RGB keyboards even when the legacy **ROG Aura Core / Aura Service** software stack is unavailable or no longer works correctly on a modern Windows installation.
 
 **Legacy Aura Control talks directly to the legacy ASUS HID interface.**
 
@@ -66,7 +68,7 @@ See [SUPPORTED_HARDWARE.md](SUPPORTED_HARDWARE.md) for more information.
 ## Quick start
 
 1. Open the [latest release](https://github.com/schrubber123-dev/LegacyAuraControl/releases/latest).
-2. Download `LegacyAuraControl_1.2.0.zip`.
+2. Download `LegacyAuraControl_1.2.1.zip`.
 3. Extract the ZIP.
 4. Close other RGB applications such as Aura Core, Armoury Crate lighting control or OpenRGB.
 5. Run `Install.cmd`.
@@ -83,7 +85,7 @@ The controller currently recognizes these legacy Aura Core product IDs:
 - `0B05:1866`
 - `0B05:1869`
 
-Only the **GU501GM / PID 1866** is claimed as hardware-confirmed in v1.2.0. Other IDs remain experimental until tested on real laptops.
+Only the **GU501GM / PID 1866** is claimed as hardware-confirmed in v1.2.1. Other IDs remain experimental until tested on real laptops.
 
 ## Coexistence with ASUS software
 
@@ -111,9 +113,9 @@ No proprietary ASUS SDK or ASUS binary is required.
 
 ## Release
 
-### v1.2.0
+### v1.2.1
 
-English-only public release based on the hardware-verified 1.1.x HID controller. System-tray support, effects, four-zone control, brightness and auto-apply are included.
+Documentation, attribution and trademark/disclaimer cleanup. The hardware-verified HID control path is unchanged from v1.2.0. System-tray support, effects, four-zone control, brightness and auto-apply are included.
 
 See [CHANGELOG.md](CHANGELOG.md).
 
@@ -129,10 +131,11 @@ Support is completely optional — the project remains free and open source.
 
 Legacy Aura Control is released under the [MIT License](LICENSE).
 
-The project contains **no ASUS binaries, DLLs, installers or artwork**.
+The project contains **no ASUS binaries, DLLs, SDKs, firmware, drivers, installers, logos or artwork**.
 
-ASUS, ROG and Aura are trademarks of their respective owner.  
-This project is independent and is not affiliated with or endorsed by ASUS.
+Compatibility names such as ASUS, ROG, Aura, Aura Core and Armoury Crate are used only to identify hardware/software interoperability. Those names and marks belong to their respective owners. Legacy Aura Control is an independent community project and is **not affiliated with, authorized, sponsored, or endorsed by ASUS or ASUSTeK Computer Inc.**
+
+See [DISCLAIMER.md](DISCLAIMER.md) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Tray behavior
 

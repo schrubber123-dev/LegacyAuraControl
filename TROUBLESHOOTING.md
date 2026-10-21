@@ -1,9 +1,11 @@
 # Troubleshooting
 
+This is an unofficial community utility and is not an ASUS support tool. If a device is not listed as confirmed, treat support as experimental.
+
 ## Device not found
 
 - Close other RGB programs.
-- Click **Neu suchen**.
+- Click **Refresh devices**.
 - Check Device Manager for an ASUS HID / N-KEY device.
 - Reboot once after removing an old Aura/Armoury lighting stack.
 
